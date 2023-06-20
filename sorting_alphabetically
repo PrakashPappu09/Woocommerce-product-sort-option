@@ -1,0 +1,24 @@
+/*
+* How to Sort Products Alphabetically in Woocommerce
+* In order to add the option for product sorting alphabetically to shop pages
+* Add these codes to active child theme functions.php file.
+* WooCommerce 7.8.0
+* WordPress 6.2.2
+*/
+function your_theme_prefix_sorting_alphabetically( $sort_args ) {
+$orderby_value = isset( $_GET['orderby'] ) ? woocommerce_clean( $_GET['orderby'] ) : apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
+if ( 'alphabetical' == $orderby_value ) {
+$sort_args['orderby'] = 'title';
+$sort_args['order'] = 'asc';
+$sort_args['meta_key'] = '';
+}
+return $sort_args;
+}
+add_filter( 'woocommerce_get_catalog_ordering_args', 'your_theme_prefix_sorting_alphabetically' );
+
+function your_theme_prefix_custom_wc_catalog_orderby( $sortby ) {
+$sortby['alphabetical'] = 'Sort by Name: Alphabetical';
+return $sortby;
+}
+add_filter( 'woocommerce_default_catalog_orderby_options', 'your_theme_prefix_custom_wc_catalog_orderby' );
+add_filter( 'woocommerce_catalog_orderby', 'your_theme_prefix_custom_wc_catalog_orderby' );
